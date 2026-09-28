@@ -1,0 +1,43 @@
+name: Download TikTok
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "TikTok URL"
+        required: true
+        type: string
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install yt-dlp
+        run: |
+          python -m pip install --upgrade yt-dlp
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Download TikTok
+        run: |
+          mkdir -p output
+          yt-dlp \
+            --no-playlist \
+            --retries 3 \
+            -o "output/video.%(ext)s" \
+            "${{ inputs.url }}"
+
+      - name: Show downloaded file
+        run: |
+          ls -lh output/
+
+      - name: Upload video
+        uses: actions/upload-artifact@v4
+        with:
+          name: tiktok-video
+          path: output/
+          retention-days: 1
