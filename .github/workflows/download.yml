@@ -14,13 +14,17 @@ jobs:
 
     steps:
       - name: Install yt-dlp
-        run: python -m pip install --upgrade yt-dlp
+        run: |
+          python -m pip install --upgrade yt-dlp
+          python -m pip install --upgrade "curl_cffi"
 
       - name: Download TikTok
         id: download
         run: |
           mkdir -p output
+
           yt-dlp \
+            --impersonate chrome \
             --no-playlist \
             --retries 3 \
             -o "output/video.%(ext)s" \
