@@ -19,7 +19,6 @@ jobs:
           python -m pip install --upgrade curl_cffi
 
       - name: Download TikTok
-        id: download
         run: |
           mkdir -p output
           yt-dlp \
@@ -30,7 +29,6 @@ jobs:
             "${{ inputs.url }}"
 
       - name: Upload artifact
-        if: steps.download.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: tiktok-video
