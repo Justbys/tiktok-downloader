@@ -18,9 +18,18 @@ jobs:
           python -m pip install --upgrade yt-dlp
           python -m pip install --upgrade curl_cffi
 
-            - name: Upload artifact
+      - name: Download TikTok
+        run: |
+          mkdir -p output
+          yt-dlp \
+            --impersonate chrome \
+            --no-playlist \
+            --retries 3 \
+            -o "output/video.%(ext)s" \
+            "${{ inputs.url }}"
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: tiktok-video
           path: output/video.mp4
-
