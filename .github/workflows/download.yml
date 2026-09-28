@@ -16,51 +16,12 @@ jobs:
       - name: Install yt-dlp
         run: |
           python -m pip install --upgrade yt-dlp
-          python -m pip install --upgrade "curl_cffi"
+          python -m pip install --upgrade curl_cffi
 
       - name: Download TikTok
         id: download
         run: |
           mkdir -p output
-
-          yt-dlp \
-            --impersonate chrome \
-            --no-playlist \
-            --retries 3 \
-            -o "output/video.%(ext)s" \
-            "${{ inputs.url }}"
-
-      - name: Upload artifact
-        if: steps.download.outcome == 'success'
-        uses: actions/upload-artifact@v4
-        with:
-          name: tiktok-video
-          path: output/video.mp4
-name: TikTok Download
-
-on:
-  workflow_dispatch:
-    inputs:
-      url:
-        description: "TikTok URL"
-        required: true
-        type: string
-
-jobs:
-  download:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Install yt-dlp
-        run: |
-          python -m pip install --upgrade yt-dlp
-          python -m pip install --upgrade "curl_cffi"
-
-      - name: Download TikTok
-        id: download
-        run: |
-          mkdir -p output
-
           yt-dlp \
             --impersonate chrome \
             --no-playlist \
